@@ -1,9 +1,14 @@
 package com.petro_spy_svc.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.petro_spy_svc.domain.BusinessError;
+import com.petro_spy_svc.domain.FetchLocationRequest;
+import com.petro_spy_svc.domain.FetchLocationResponse;
 import com.petro_spy_svc.domain.LocationRequest;
 import com.petro_spy_svc.domain.LocationResponse;
 import com.petro_spy_svc.entity.LocationEntity;
@@ -34,46 +39,28 @@ public class CreateLocationServiceImpl implements CreateLocationService {
 			if (null != locationName && null != locationName.getLocation() && null != locationRequest
 					&& null != locationRequest.getLocation()
 					&& locationName.getLocation().equals(locationRequest.getLocation())) {
-				businessError.setErrCode("ERR06");
-				businessError.setErrMsg("Please Provide Different Location as the Location already Exists");
-				locationResponse.setBusinessError(businessError);
-				return locationResponse;
+				return locationAlreadyExist(locationResponse, businessError);
 			}
 
 			if (null != location && null != location.getId() && null != locationRequest
 					&& null != locationRequest.getLocationId()
 					&& location.getId().equals(locationRequest.getLocationId())) {
-				businessError.setErrCode("ERR05");
-				businessError.setErrMsg("Please Provide Different Id as the ID already Exists");
-				locationResponse.setBusinessError(businessError);
-				return locationResponse;
+				return idAlreadyExist(locationResponse, businessError);
 			}
 
 			if (null != locationRequest && null == locationRequest.getLocationId()) {
-				businessError.setErrCode("ERR01");
-				businessError.setErrMsg("Please Provide the Location Id");
-				locationResponse.setBusinessError(businessError);
-				return locationResponse;
+				return provideLocationId(locationResponse, businessError);
 			}
 
 			if (null != locationRequest && null == locationRequest.getLocation()) {
-				businessError.setErrCode("ERR02");
-				businessError.setErrMsg("Please Provide the Location");
-				locationResponse.setBusinessError(businessError);
-				return locationResponse;
+				return provideLocation(locationResponse, businessError);
 			}
 
 			if (null != locationRequest && null == locationRequest.getState()) {
-				businessError.setErrCode("ERR03");
-				businessError.setErrMsg("Please Provide the State");
-				locationResponse.setBusinessError(businessError);
-				return locationResponse;
+				return provideState(locationResponse, businessError);
 			}
 			if (null != locationRequest && null == locationRequest.getCountry()) {
-				businessError.setErrCode("ERR04");
-				businessError.setErrMsg("Please Provide the Country");
-				locationResponse.setBusinessError(businessError);
-				return locationResponse;
+				return provideCountry(locationResponse, businessError);
 			}
 			if (null != locationRequest && null != locationRequest.getLocationId()) {
 				locationEntity.setId(locationRequest.getLocationId());
@@ -101,6 +88,90 @@ public class CreateLocationServiceImpl implements CreateLocationService {
 		locationResponse.setMessage("Data Saved Successfully");
 
 		return locationResponse;
+	}
+
+	private LocationResponse provideCountry(LocationResponse locationResponse, BusinessError businessError) {
+		businessError.setErrCode("ERR04");
+		businessError.setErrMsg("Please Provide the Country");
+		locationResponse.setBusinessError(businessError);
+		return locationResponse;
+	}
+
+	private LocationResponse provideState(LocationResponse locationResponse, BusinessError businessError) {
+		businessError.setErrCode("ERR03");
+		businessError.setErrMsg("Please Provide the State");
+		locationResponse.setBusinessError(businessError);
+		return locationResponse;
+	}
+
+	private LocationResponse provideLocation(LocationResponse locationResponse, BusinessError businessError) {
+		businessError.setErrCode("ERR02");
+		businessError.setErrMsg("Please Provide the Location");
+		locationResponse.setBusinessError(businessError);
+		return locationResponse;
+	}
+
+	private LocationResponse provideLocationId(LocationResponse locationResponse, BusinessError businessError) {
+		businessError.setErrCode("ERR01");
+		businessError.setErrMsg("Please Provide the Location Id");
+		locationResponse.setBusinessError(businessError);
+		return locationResponse;
+	}
+
+	private LocationResponse idAlreadyExist(LocationResponse locationResponse, BusinessError businessError) {
+		businessError.setErrCode("ERR05");
+		businessError.setErrMsg("Please Provide Different Id as the ID already Exists");
+		locationResponse.setBusinessError(businessError);
+		return locationResponse;
+	}
+
+	private LocationResponse locationAlreadyExist(LocationResponse locationResponse, BusinessError businessError) {
+		businessError.setErrCode("ERR06");
+		businessError.setErrMsg("Please Provide Different Location as the Location already Exists");
+		locationResponse.setBusinessError(businessError);
+		return locationResponse;
+	}
+
+	@Override
+	public FetchLocationResponse fetchLocationName(FetchLocationRequest fetchlocationRequest) {
+		
+		FetchLocationResponse fetchLocationResponse=new FetchLocationResponse();
+		BusinessError businessError = new BusinessError();
+		List<String>location=new ArrayList<String>();
+		try {
+			if (null != fetchlocationRequest && null == fetchlocationRequest.getState()) {
+				return provideState(fetchLocationResponse, businessError);
+			}
+			if (null != fetchlocationRequest && null == fetchlocationRequest.getCountry()) {
+				return provideCountry(fetchLocationResponse, businessError);
+			}
+			List<LocationEntity> locationEntity=locationRepository.getLocationNameBasedOnState(fetchlocationRequest.getState());
+			List<String>locationName=locationEntity.stream().map(LocationEntity::getLocation).toList();
+			for(String loc:locationName) {
+				location.add(loc);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		fetchLocationResponse.setLocation(location);
+		return fetchLocationResponse;
+	}
+
+	private FetchLocationResponse provideCountry(FetchLocationResponse fetchLocationResponse,
+			BusinessError businessError) {
+		businessError.setErrCode("ERR04");
+		businessError.setErrMsg("Please Provide the Country");
+		fetchLocationResponse.setBusinessError(businessError);
+		return fetchLocationResponse;
+	}
+
+	private FetchLocationResponse provideState(FetchLocationResponse fetchLocationResponse,
+			BusinessError businessError) {
+		businessError.setErrCode("ERR03");
+		businessError.setErrMsg("Please Provide the State");
+		fetchLocationResponse.setBusinessError(businessError);
+		return fetchLocationResponse;
 	}
 
 }

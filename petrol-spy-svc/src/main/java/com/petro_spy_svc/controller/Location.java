@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.petro_spy_svc.domain.FetchLocationRequest;
+import com.petro_spy_svc.domain.FetchLocationResponse;
 import com.petro_spy_svc.domain.LocationRequest;
 import com.petro_spy_svc.domain.LocationResponse;
 import com.petro_spy_svc.service.CreateLocationService;
@@ -27,5 +29,10 @@ public class Location {
 		  return new ResponseEntity<>(createLocationService.creteLocation(locationRequest),HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/fetchLocationName",consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<FetchLocationResponse> fetchLocationName(@RequestBody FetchLocationRequest fetchlocationRequest) {
+	  return new ResponseEntity<>(createLocationService.fetchLocationName(fetchlocationRequest),HttpStatus.OK);
+}
 	                
 }
