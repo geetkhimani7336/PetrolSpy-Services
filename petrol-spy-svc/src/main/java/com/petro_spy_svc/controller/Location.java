@@ -33,6 +33,8 @@ public class Location {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FetchLocationResponse> fetchLocationName(@RequestBody FetchLocationRequest fetchlocationRequest) {
 	  return new ResponseEntity<>(createLocationService.fetchLocationName(fetchlocationRequest),HttpStatus.OK);
+	  
+	  
 }
 	                
 }
