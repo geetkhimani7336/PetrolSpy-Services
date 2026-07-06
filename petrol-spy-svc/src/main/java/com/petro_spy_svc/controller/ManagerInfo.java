@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.petro_spy_svc.domain.FetchManagerDetailRequest;
+import com.petro_spy_svc.domain.FetchManagerDetailResponse;
 import com.petro_spy_svc.domain.ManagerInfoRequest;
 import com.petro_spy_svc.domain.ManagerInfoResponse;
 import com.petro_spy_svc.service.ManagerInfoService;
@@ -25,5 +27,14 @@ public class ManagerInfo {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagerInfoResponse> createLocation(@RequestBody ManagerInfoRequest managerInfoRequest) {
 	  return new ResponseEntity<>(managerInfoService.createManager(managerInfoRequest),HttpStatus.OK);
+	  
+	  
 }
+	
+	@PostMapping(value = "/fetchManagerDetail",consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<FetchManagerDetailResponse> fetchManagerDetail(@RequestBody FetchManagerDetailRequest fetchManagerDetailRequest) {
+	  return new ResponseEntity<>(managerInfoService.fetchManagerDetail(fetchManagerDetailRequest),HttpStatus.OK);
+}
+	
 }

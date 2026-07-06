@@ -1,7 +1,7 @@
 package com.petro_spy_svc.domain;
 
-public class ManagerInfoRequest {
-	
+public class FetchMangerInfoDetail {
+
 	private Long id;
 
 	private String name;
@@ -12,11 +12,19 @@ public class ManagerInfoRequest {
 
 	private String email;
 
-	private AddressInfo addressInfo;
+	private AddressInfo addressInfo;;
 
 	private String designation;
 
 	private String phoneNo;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -50,7 +58,13 @@ public class ManagerInfoRequest {
 		this.email = email;
 	}
 
-	
+	public AddressInfo getAddressInfo() {
+		return addressInfo;
+	}
+
+	public void setAddressInfo(AddressInfo addressInfo) {
+		this.addressInfo = addressInfo;
+	}
 
 	public String getDesignation() {
 		return designation;
@@ -67,23 +81,6 @@ public class ManagerInfoRequest {
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
-
-	public AddressInfo getAddressInfo() {
-		return addressInfo;
-	}
-
-	public void setAddressInfo(AddressInfo addressInfo) {
-		this.addressInfo = addressInfo;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	
 	
 }
